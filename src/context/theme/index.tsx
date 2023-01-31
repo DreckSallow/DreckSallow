@@ -14,13 +14,19 @@ const ContextTheme = createContext<ContextThemeI>({
 
 const ThemeState: ThemeContextI = {
 	colors: { ...ThemeConstants.light },
-	buildColor(colorType, alpha?: number) {
-		let alphaPercentage = alpha ?? 100;
-		if (alphaPercentage < 0 || alphaPercentage > 100) {
-			console.error(`The alpha provided goes out of range: ${alpha}`);
-			alphaPercentage = 100;
+	buildColor(colorType, smooth?, alpha?) {
+		let color = this.colors[colorType];
+		let colorSmooth = color[2] + (smooth ?? 0);
+		let alphaValue = alpha ?? 100;
+
+		if (alphaValue < 0 || alphaValue > 100) {
+			console.error("alpha out of range: ", alpha);
 		}
-		return `hsla(${this.colors[colorType]},${alphaPercentage}%)`;
+		return `hsla(${color[0]},${color[1]}%,${colorSmooth}%,${alphaValue}%)`;
+	},
+	get(colorType) {
+		let color = this.colors[colorType];
+		return `hsl(${color[0]},${color[1]}%,${color[2]}%)`;
 	},
 };
 
@@ -35,6 +41,7 @@ export const ThemeContext = ({ children }: Props) => {
 		changeTheme: function (typeTheme): void {
 			setThemeContext((prev) => ({
 				buildColor: prev.buildColor,
+				get: prev.get,
 				colors: { ...ThemeConstants[typeTheme] },
 			}));
 		},
