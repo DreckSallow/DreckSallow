@@ -14,28 +14,31 @@ interface LinkI extends RouteLink {
 
 const Link = ({ link, text, click, className }: LinkI) => {
 	return (
-		<button
+		// rome-ignore lint/a11y/useValidAnchor: <explanation>
+		<a
+			href={link}
 			className={className}
-			onClick={(e) => {
-				e.preventDefault();
-				window.history.pushState({}, "", link);
-				click(link);
-			}}
 			tabIndex={0}
-			role="link"
+			onClick={() => click(link)}
 		>
 			{text}
-		</button>
+		</a>
 	);
 };
 
 interface NavBarProps {
+	className?: string;
 	root: RouteLink;
 	routes: RouteLink[];
 	isResponsive?: boolean;
 }
 
-export default function NavBar({ root, routes, isResponsive }: NavBarProps) {
+export default function NavBar({
+	root,
+	routes,
+	isResponsive,
+	className,
+}: NavBarProps) {
 	const [displayContent, setDisplayContent] = useState(false);
 	const [currentPath, setCurrentPath] = useState(
 		window.location.pathname + window.location.hash,
@@ -53,7 +56,10 @@ export default function NavBar({ root, routes, isResponsive }: NavBarProps) {
 
 	return (
 		<>
-			<Nav className="flex-row w-full" isResponsive={isResponsive ?? false}>
+			<Nav
+				className={`flex-row w-full${className ?? ""}`}
+				isResponsive={isResponsive ?? false}
+			>
 				<NavLink
 					className="flex"
 					selected={false}
@@ -119,7 +125,9 @@ const Nav = styled.section<{ isResponsive: boolean }>`
 	justify-content: ${({ isResponsive }) =>
 		isResponsive ? "space-between" : "space-evenly"};
 	padding: 0.8em;
-	position: relative;
+	position: fixed;
+	top: 0;
+	z-index: 100;
 `;
 
 const NavLink = styled(Link)<{ selected: boolean }>`
@@ -128,6 +136,7 @@ const NavLink = styled(Link)<{ selected: boolean }>`
 		selected ? theme.buildColor("primary") : theme.buildColor("fontColor")};
 	cursor: pointer;
 	transition: color 200ms ease-in;
+	font-size: 0.9rem;
 	&:hover{
 		color: ${({ theme }) => theme.buildColor("primary")};
 	}
@@ -139,10 +148,12 @@ const NavContent = styled.div<{ isWatch: boolean }>`
 		`.5px solid ${theme.buildColor("fontColor", 90)}`};
 	gap: 1.5em;
 	height:calc(100% - 58.5px);
+	margin-top: 58.5px;
 	opacity: ${({ isWatch }) => (isWatch ? "1" : "0")};
 	transform: ${({ isWatch }) =>
 		isWatch ? "translateX(0px)" : "translateX(-100%)"};
 	transition: all 500ms ease-in;
 	position: fixed;
 	width:100%;
+	z-index:100;
 `;
