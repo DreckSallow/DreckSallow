@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import NavBar from "../components/NavBar";
 import About from "./sections/About";
+import Skills from "./sections/Skills";
 
 const Routes = [
 	{
@@ -51,6 +52,7 @@ export default function ({ isResponsive }: Props) {
 				</Section>
 				<Section id="skills">
 					<TitleSection>Skills</TitleSection>
+					<Skills />
 				</Section>
 				<Section id="projects">
 					<TitleSection>Projects</TitleSection>
@@ -71,11 +73,10 @@ const SectionView = styled.section`
 `;
 
 const Section = styled.article`
-  /* height: 100vh; */
+	margin: 0 auto;
+	max-width: 900px;
 	min-height: 100vh;
   padding-top: 70px;
-	max-width: 900px;
-	margin: 0 auto;
 `;
 
 const FirstSection = styled(Section)`
@@ -89,7 +90,7 @@ const FirstSection = styled(Section)`
     line-height: 0.8em;
     margin-bottom: .1em;
   }
-	& h3,p{
+	& h3{
     color: ${({ theme }) => theme.buildColor("primary", 0, 80)};
 	}
 
@@ -100,14 +101,14 @@ const FirstSection = styled(Section)`
   }
 
   & button{
-    width: max-content;
-    color: ${({ theme }) => theme.buildColor("secondary", 0, 80)};
     border: ${({ theme }) => `1px solid ${theme.buildColor("secondary")}`};
     border-radius:5px;
+    color: ${({ theme }) => theme.buildColor("secondary", 0, 80)};
+		cursor: pointer;
     padding: 1.3em 3.5em;
     margin-top: 2em;
     transition: all 400ms ease-in-out;
-		cursor: pointer;
+    width: max-content;
   }
   & button:hover{
     background-color: ${({ theme }) => theme.buildColor("secondary", 40, 40)};
@@ -120,15 +121,15 @@ const FirstSection = styled(Section)`
 const TitleSection = styled.h4`
   color: ${({ theme }) => theme.buildColor("primary")};
 	display: inline;
-	position: relative;
 	font-size: 2rem;
+	position: relative;
 	&::before{
-		content: "";
-		position: absolute;
-		bottom: -3px;
-		left: 0;
-		width: 30px;
-		height: 3px;
 		background-color: ${({ theme }) => theme.buildColor("primary", 10, 80)};
+		bottom: -3px;
+		content: "";
+		height: 3px;
+		left: 0;
+		position: absolute;
+		width: 30px;
 	}
 `;
