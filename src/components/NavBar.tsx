@@ -135,8 +135,8 @@ const NavLink = styled(Link)<{ selected: boolean }>`
 	color: ${({ theme, selected }) =>
 		selected ? theme.buildColor("primary") : theme.buildColor("fontColor")};
 	cursor: pointer;
-	transition: color 200ms ease-in;
 	font-size: 0.9rem;
+	transition: color 200ms ease-in;
 	&:hover{
 		color: ${({ theme }) => theme.buildColor("primary")};
 	}
@@ -150,10 +150,10 @@ const NavContent = styled.div<{ isWatch: boolean }>`
 	height:calc(100% - 58.5px);
 	margin-top: 58.5px;
 	opacity: ${({ isWatch }) => (isWatch ? "1" : "0")};
+	position: fixed;
 	transform: ${({ isWatch }) =>
 		isWatch ? "translateX(0px)" : "translateX(-100%)"};
 	transition: all 500ms ease-in;
-	position: fixed;
 	width:100%;
 	z-index:100;
 `;
