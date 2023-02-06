@@ -31,23 +31,14 @@ body,
   max-height: 100%;
 }
 
+img {
+  max-width: 100%;
+}
+
 button {
   outline: none;
   border: 0;
 }
 a {
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

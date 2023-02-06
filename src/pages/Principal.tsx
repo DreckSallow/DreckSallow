@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import NavBar from "../components/NavBar";
 import About from "./sections/About";
+import Projects from "./sections/Projects";
 import Skills from "./sections/Skills";
 
 const Routes = [
@@ -56,6 +57,7 @@ export default function ({ isResponsive }: Props) {
 				</Section>
 				<Section id="projects">
 					<TitleSection>Projects</TitleSection>
+					<Projects />
 				</Section>
 				<Section id="contact">
 					<TitleSection>Contact me</TitleSection>

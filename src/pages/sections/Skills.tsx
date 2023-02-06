@@ -89,11 +89,11 @@ const Content = styled.div`
 `;
 
 const CustomCard = styled(Card)<{ iconFill?: string; iconHoverFill?: string }>`
-	box-shadow: 1px 2px 11px 0px rgb(0 0 0 / 40%);
-		-webkit-box-shadow: 1px 2px 11px 0px rgb(0 0 0 / 40%);
-		-moz-box-shadow: 1px 2px 11px 0px rgb(0 0 0 / 40%);
+	box-shadow:  rgb(0 0 0 / 10%) 0px 5px 10px;
+		-webkit-box-shadow:  rgb(0 0 0 / 10%) 0px 5px 10px;
+		-moz-box-shadow:  rgb(0 0 0 / 10%) 0px 5px 10px;
 	display: flex;
-	transition: all 200ms ease-in;
+	transition: all 150ms ease-in;
 
  & svg{
 	fill: ${({ iconFill }) => (iconFill ? iconFill : "black")};
@@ -105,9 +105,9 @@ const CustomCard = styled(Card)<{ iconFill?: string; iconHoverFill?: string }>`
  }
 
  &:hover{
-	box-shadow: 1px 2px 20px 0px rgb(0 0 0 / 40%);
-		-webkit-box-shadow: 1px 2px 20px 0px rgb(0 0 0 / 40%);
-		-moz-box-shadow: 1px 2px 20px 0px rgb(0 0 0 / 40%);
+	box-shadow:  rgb(0 0 0 / 20%) 0px 5px 10px;
+		-webkit-box-shadow:  rgb(0 0 0 / 20%) 0px 5px 10px;
+		-moz-box-shadow:  rgb(0 0 0 / 20%) 0px 5px 10px;
 	transform: translateY(-4px);
  }
 `;

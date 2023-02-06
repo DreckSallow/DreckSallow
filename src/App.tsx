@@ -27,6 +27,8 @@ function App() {
 }
 
 const AppContainer = styled.main`
+	color: ${({ theme }) => theme.buildColor("fontColor")};
+	background-color: ${({ theme }) => theme.get("back")};
 	min-height: 100vh;
 	width:100vw;
 	overflow-x: hidden;
