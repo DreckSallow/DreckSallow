@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./App.css";
+import { LocalRouterProvider } from "./context/router/localRouter";
 import { ThemeContext } from "./context/theme";
 import Principal from "./pages/Principal";
 
@@ -20,7 +21,9 @@ function App() {
 	return (
 		<ThemeContext>
 			<AppContainer>
-				<Principal isResponsive={width < 425} />
+				<LocalRouterProvider>
+					<Principal isResponsive={width < 425} />
+				</LocalRouterProvider>
 			</AppContainer>
 		</ThemeContext>
 	);
