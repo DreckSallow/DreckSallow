@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Github, Linkedin, Mail } from "../components/icons/social";
 import NavBar from "../components/NavBar";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
@@ -59,13 +60,81 @@ export default function ({ isResponsive }: Props) {
 					<TitleSection>Projects</TitleSection>
 					<Projects />
 				</Section>
-				<Section id="contact">
+				<Section id="contact" minH="auto">
 					<TitleSection>Contact me</TitleSection>
+					<ContactSection className="flex-row">
+						<ContactContent>
+							<h2>
+								Do you have a good and interesting idea and want to make it come
+								true?
+							</h2>
+							<p>
+								Then I would love to hear from you and your project! I'm always
+								looking for challenging projects where I can improve, learn more
+								and grow as a professional.You can contact me through my email:
+								&nbsp;
+								<a href="mailto:arandadikson@gmail.com">
+									arandadikson@gmail.com
+								</a>
+							</p>
+							<div className="Contact__Links flex flex-center">
+								<a
+									href="https://github.com/DreckSallow"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<Github height={50} width={50} fill="#24292f" />
+								</a>
+								<a
+									href="https://www.linkedin.com/in/dikson-aranda/"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<Linkedin height={50} width={50} fill="#0a66c2" />
+								</a>
+								<a
+									href="mailto:arandadikson@gmail.com"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<Mail height={50} width={50} fill="#ea2e2e" />
+								</a>
+							</div>
+						</ContactContent>
+					</ContactSection>
 				</Section>
 			</SectionView>
 		</>
 	);
 }
+
+const ContactContent = styled.div`
+	max-width: 600px;
+	& h2{
+		color: ${({ theme }) => theme.buildColor("fontColor", 0, 80)};
+		margin-bottom: .8em;
+	}
+	& p{
+		margin-bottom: 2em;
+	} 
+	& p > a{
+		color: ${({ theme }) => theme.buildColor("primary", 10, 80)};
+		transition: all 200ms ease-in;
+	}
+	& p > a:hover{
+		box-shadow: ${({ theme }) =>
+			`0 1px 0 ${theme.buildColor("primary", 10, 80)}`};
+	} 
+	& .Contact__Links{
+		gap: 1em;
+	}
+`;
+
+const ContactSection = styled.div`
+	gap: 1em;
+	justify-content: center;
+	margin: 3em 0;
+`;
 
 const SectionView = styled.section`
   padding: 0 3em;
@@ -74,17 +143,17 @@ const SectionView = styled.section`
   }
 `;
 
-const Section = styled.article`
+const Section = styled.article<{ minH?: string }>`
 	margin: 0 auto;
 	max-width: 900px;
-	min-height: 100vh;
+	min-height: ${({ minH }) => (minH ? minH : "100vh")};
   padding-top: 70px;
 `;
 
 const FirstSection = styled(Section)`
-  justify-content: center;
   gap: .5em;
 	height: 100vh;
+  justify-content: center;
   padding-top: 60px;
   & h2{
     color: ${({ theme }) => theme.buildColor("primary", 10)};
