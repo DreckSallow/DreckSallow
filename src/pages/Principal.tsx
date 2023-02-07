@@ -76,6 +76,7 @@ export default function ({ isResponsive }: Props) {
 								<a href="mailto:arandadikson@gmail.com">
 									arandadikson@gmail.com
 								</a>
+								&nbsp;or click on these icons:
 							</p>
 							<div className="Contact__Links flex flex-center">
 								<a
@@ -133,7 +134,7 @@ const ContactContent = styled.div`
 const ContactSection = styled.div`
 	gap: 1em;
 	justify-content: center;
-	margin: 3em 0;
+	margin: 4em 0 5em 0;
 `;
 
 const SectionView = styled.section`
