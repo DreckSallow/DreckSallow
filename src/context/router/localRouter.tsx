@@ -3,7 +3,8 @@ import { Children } from "../../interfaces";
 
 interface LocalRouter {
 	localPath: string;
-	setLocalPath(newPath: string): void;
+	hasEffect: boolean;
+	setLocalPath(newPath: string, hasEffec?: boolean): void;
 	sanitize(s: string): string;
 	compareHash(s: string): boolean;
 }
@@ -14,8 +15,11 @@ const hashSanitize = (s: string): string => {
 
 export const LocalRouterContext = createContext<LocalRouter>({
 	localPath: "",
-	setLocalPath(newPath) {
+	hasEffect: true,
+	setLocalPath(newPath, hasEffect = true) {
 		window.location.hash = newPath ?? "";
+		this.localPath = newPath ?? "";
+		this.hasEffect = hasEffect;
 	},
 	compareHash(s) {
 		return hashSanitize(s) === hashSanitize(this.localPath);
@@ -26,22 +30,24 @@ export const LocalRouterContext = createContext<LocalRouter>({
 });
 
 export const LocalRouterProvider = ({ children }: Children) => {
-	const [localPath, setlocalPath] = useState<LocalRouter["localPath"]>("");
+	const [pathState, setPathState] = useState({
+		localPath: "",
+		hasEffect: true,
+	});
 
 	useEffect(() => {
-		setlocalPath(`${window.location.hash}`);
-		function listenHash() {
-			setlocalPath(`${window.location.hash}`);
-		}
-
-		window.addEventListener("hashchange", listenHash);
-		return () => {
-			window.removeEventListener("hashchange", listenHash);
-		};
+		setPathState({
+			localPath: `${window.location.hash}`,
+			hasEffect: true,
+		});
 	}, []);
 
-	const setLocalPath = (newPath: string | null) => {
-		window.location.hash = newPath ?? "";
+	const setLocalPath = (newPath: string | null, hasEffect = true) => {
+		window.history.pushState(0, "", newPath ?? "");
+		setPathState({
+			localPath: `${window.location.hash}`,
+			hasEffect,
+		});
 	};
 	const sanitize = (s: string) => {
 		return hashSanitize(s);
@@ -50,10 +56,11 @@ export const LocalRouterProvider = ({ children }: Children) => {
 	return (
 		<LocalRouterContext.Provider
 			value={{
-				localPath,
+				localPath: pathState.localPath,
 				setLocalPath,
+				hasEffect: pathState.hasEffect,
 				compareHash: (s) => {
-					return sanitize(s) === sanitize(localPath);
+					return sanitize(s) === sanitize(pathState.localPath);
 				},
 				sanitize,
 			}}

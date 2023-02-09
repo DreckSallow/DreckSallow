@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { useLocalRouter } from "../context/router/localRouter";
 import { MenuIcon, XIcon } from "./icons/Menu";
@@ -20,7 +20,10 @@ const Link = ({ link, text, click, className }: LinkI) => {
 			href={link}
 			className={className}
 			tabIndex={0}
-			onClick={() => click(link)}
+			onClick={(e) => {
+				e.preventDefault();
+				click(link);
+			}}
 		>
 			{text}
 		</a>
@@ -62,7 +65,7 @@ export default function NavBar({
 				<NavLink
 					className="flex"
 					selected={false}
-					click={handleNavigation}
+					click={setLocalPath}
 					text={root.text}
 					link={root.link}
 				/>
