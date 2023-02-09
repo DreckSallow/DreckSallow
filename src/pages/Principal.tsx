@@ -1,6 +1,10 @@
+import { useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Github, Linkedin, Mail } from "../components/icons/social";
+import IntoSection from "../components/IntoSection";
 import NavBar from "../components/NavBar";
+import { useLocalRouter } from "../context/router/localRouter";
+import { createObserverDefault } from "../utils/observer";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Skills from "./sections/Skills";
@@ -8,19 +12,19 @@ import Skills from "./sections/Skills";
 const Routes = [
 	{
 		text: "About",
-		link: "/#about",
+		link: "#about",
 	},
 	{
 		text: "Skills",
-		link: "/#skills",
+		link: "#skills",
 	},
 	{
 		text: "Projects",
-		link: "/#projects",
+		link: "#projects",
 	},
 	{
 		text: "Contact",
-		link: "/#contact",
+		link: "#contact",
 	},
 ];
 
@@ -29,15 +33,45 @@ interface Props {
 }
 
 export default function ({ isResponsive }: Props) {
+	const { setLocalPath } = useLocalRouter();
+
+	const observer = useMemo(() => {
+		return createObserverDefault((entry) => {
+			if (entry.isIntersecting) {
+				if (entry.target.getAttribute("id")) {
+					setLocalPath(`#${entry.target.getAttribute("id")}` as string, false);
+				}
+			}
+		});
+	}, []);
+
+	useEffect(() => {
+		Routes.map((r) => r.link)
+			.map((id) => {
+				return document.querySelector(`${id}`);
+			})
+			.forEach((e) => {
+				if (!e) return;
+				observer.observe(e);
+			});
+		const initSection = document.querySelector("#start");
+		if (initSection) {
+			observer.observe(initSection);
+		}
+		return () => {
+			observer.disconnect();
+		};
+	}, []);
+
 	return (
 		<>
 			<NavBar
-				root={{ link: "/", text: "DiksonDev" }}
+				root={{ link: "#start", text: "DiksonDev" }}
 				routes={Routes}
 				isResponsive={isResponsive}
 			/>
 			<SectionView>
-				<FirstSection className="flex-col">
+				<FirstSection className="flex-col" id="start">
 					<h2>Dikson Aranda</h2>
 					<h3>I bring websites to life with code</h3>
 					<p>
@@ -144,7 +178,7 @@ const SectionView = styled.section`
   }
 `;
 
-const Section = styled.article<{ minH?: string }>`
+const Section = styled(IntoSection)<{ minH?: string }>`
 	margin: 0 auto;
 	max-width: 900px;
 	min-height: ${({ minH }) => (minH ? minH : "100vh")};

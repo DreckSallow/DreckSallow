@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
+import { useLocalRouter } from "../context/router/localRouter";
 import { MenuIcon, XIcon } from "./icons/Menu";
 
 interface RouteLink {
@@ -19,7 +20,10 @@ const Link = ({ link, text, click, className }: LinkI) => {
 			href={link}
 			className={className}
 			tabIndex={0}
-			onClick={() => click(link)}
+			onClick={(e) => {
+				e.preventDefault();
+				click(link);
+			}}
 		>
 			{text}
 		</a>
@@ -40,13 +44,11 @@ export default function NavBar({
 	className,
 }: NavBarProps) {
 	const [displayContent, setDisplayContent] = useState(false);
-	const [currentPath, setCurrentPath] = useState(
-		window.location.pathname + window.location.hash,
-	);
+	const { setLocalPath, compareHash } = useLocalRouter();
 
 	const handleNavigation = useCallback(
 		(link: string) => {
-			setCurrentPath(link);
+			setLocalPath(link);
 			if (isResponsive) {
 				setDisplayContent((p) => !p);
 			}
@@ -63,7 +65,7 @@ export default function NavBar({
 				<NavLink
 					className="flex"
 					selected={false}
-					click={handleNavigation}
+					click={setLocalPath}
 					text={root.text}
 					link={root.link}
 				/>
@@ -73,8 +75,8 @@ export default function NavBar({
 							<NavLink
 								// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 								key={i}
-								selected={r.link === currentPath}
-								click={handleNavigation}
+								selected={compareHash(r.link)}
+								click={setLocalPath}
 								text={r.text}
 								link={r.link}
 							/>
@@ -104,7 +106,7 @@ export default function NavBar({
 						<NavLink
 							// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 							key={i}
-							selected={r.link === currentPath}
+							selected={compareHash(r.link)}
 							click={handleNavigation}
 							text={r.text}
 							link={r.link}
