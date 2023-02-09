@@ -7,7 +7,7 @@ import Card from "../../components/Card";
 export default function () {
 	return (
 		<Content className="flex-col">
-			<CardProject
+			<Project
 				imgSrc="https://github.com/DreckSallow/Marknote/raw/main/readme/marknote-img.PNG"
 				imgAlt="Marknote"
 				title="Marknote"
@@ -20,12 +20,12 @@ export default function () {
 				Markdown allow edit markdown files (based in CommonMark) and see the
 				text parsed. Have a file tree to manage the files and folders in the
 				project
-			</CardProject>
-			<CardProject
+			</Project>
+			<Project
 				imgSrc="https://github.com/DreckSallow/Marknote/raw/main/readme/marknote-img.PNG"
 				imgAlt="CountriesApp"
 				title="CountriesApp"
-				tech={["Svelte", "Typescript", "GrpahQl"]}
+				tech={["Svelte", "Typescript", "GraphQl"]}
 				repoLink="https://github.com/DreckSallow/countries-app-svelte"
 				demoLink="https://countries-app-svelte-6x6p-kadnr1vr8-dreck2003.vercel.app/"
 			>
@@ -37,8 +37,8 @@ export default function () {
 				<br />
 				CountriesApp gets the countries and other information from the backend
 				(integrated with graphql), using data from a database in postgresSql.
-			</CardProject>
-			<CardProject
+			</Project>
+			<Project
 				imgSrc="https://github.com/DreckSallow/Marknote/raw/main/readme/marknote-img.PNG"
 				imgAlt="Wflow"
 				title="Wflow"
@@ -50,8 +50,8 @@ export default function () {
 				any time and open with vscode. <br />
 				<br /> Also, the user can manage their todos/tasks, changing the status
 				as "completed" or "not started".
-			</CardProject>
-			<CardProject
+			</Project>
+			<Project
 				imgSrc="https://github.com/DreckSallow/Waxed/raw/main/Readme/workspace.PNG"
 				imgAlt="Waxed"
 				title="Waxed"
@@ -64,7 +64,7 @@ export default function () {
 				<br />- Create learning spaces: <br />- Control Panel: <br /> - Create
 				and delete links and PDF files:
 				<br />- Add a summary or a note:
-			</CardProject>
+			</Project>
 		</Content>
 	);
 }
@@ -76,7 +76,7 @@ interface ProjectProps {
 	tech: string[];
 	repoLink: string;
 	demoLink?: string;
-	imgSrc: string;
+	imgSrc?: string;
 	imgAlt: string;
 }
 
@@ -91,32 +91,32 @@ const Project = ({
 	...card
 }: ProjectProps) => {
 	return (
-		<Card {...card}>
-			<ProjectContent className="Project__Content">
+		<CardProject className="grid">
+			<CardProjectContent {...card}>
 				<h3> {title}</h3>
 				<p className="font-medium">{children}</p>
-				<div className="Project__Tech">
+				<div className="Project__Tech flex">
 					{tech.map((s) => (
-						<span>{s}</span>
+						<div>
+							<span>{s}</span>
+						</div>
 					))}
 				</div>
 				<div className="Project__Links flex">
 					<ButtonLink href={repoLink} target="_blank">
 						Repository
 					</ButtonLink>
-					{demoLink ? (
+					{demoLink && (
 						<ButtonLink href={demoLink} target="_blank">
 							Demo
 						</ButtonLink>
-					) : (
-						<></>
 					)}
 				</div>
-			</ProjectContent>
+			</CardProjectContent>
 			<div className="Project__Img flex-row">
 				<img src={imgSrc} alt={imgAlt} />
 			</div>
-		</Card>
+		</CardProject>
 	);
 };
 
@@ -130,55 +130,68 @@ const ButtonLink = styled.a`
 `;
 
 const Content = styled.div`
-  margin-top: 2em;
 	gap: 3em;
+  margin-top: 2em;
 `;
 
-const CardProject = styled(Project)`
-	/* margin: 0 auto; */
-  position: relative;
-	max-width: 500px;
-	padding: 4%;
-	padding-right: 8%;
+const CardProjectContent = styled(Card)`
 	box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px;
 		-webkit-box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px;
-		-moz-box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px;
+		-moz-box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px; 
+	grid-area: 1/1/auto/3;
+	padding: 2em;
+	padding-right: 5em;
 
-  & .Project__Img{
-		border-radius: 10px;
-		height: 80%;
-		overflow: hidden;
-    position: absolute;
-		max-width: 90%;
-    right: 10px;
-    top: 0;
-    transform: translate(90%,10%);
-  }
-`;
-
-const ProjectContent = styled.div`
-
-	& h3{
-		margin-bottom: .3em;
+	@media (max-width:650px){
+		grid-area: 1/1/2/1;
+		padding: 2em;
 	}
 
-	& .Project__Tech{
-		font-size: .7rem;
+	& p{
 		margin-top: 1em;
-		overflow-x: auto;
-		padding: 0 .1em;
-		color: ${({ theme }) => theme.get("fontColor")};
 	}
-	
-	& .Project__Tech > span{
+	& .Project__Tech{
+		color: ${({ theme }) => theme.get("fontColor")};
+		font-size: .65rem;
+		font-weight: 500;
+		flex-wrap: wrap;
+		margin-top: 1em;
+		padding: 0 .1em;
+	}
+	& .Project__Tech  span{
+		border: ${({ theme }) =>
+			`1px solid ${theme.buildColor("secondary", -5, 90)}`};
+		border-radius: 30px;
 		margin-right: .3em;
 		padding: .2em .5em;
-		border-radius: 30px;
-		outline: 1px solid green;
 	}
-
 	& .Project__Links{
 		font-size: .75rem;
 		margin-top: .7em;
 	}
+
+`;
+
+const CardProject = styled.div`
+	align-items: center;
+	grid-template-columns: 1fr 5em 1fr;
+	
+	& > div:last-child{
+		grid-area: 1/2/auto/4;
+		@media (max-width:650px){
+			display: none;
+		}
+	}
+
+
+	@media (max-width:650px){
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr;
+	}
+
+  & .Project__Img{
+		border-radius: 10px;
+		overflow: hidden;
+		max-width: 410px;
+  }
 `;
