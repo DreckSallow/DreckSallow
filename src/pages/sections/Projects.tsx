@@ -2,27 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import Card from "../../components/Card";
 
-//TODO: Change the url images to necesary projects:
-
 export default function () {
 	return (
 		<Content className="flex-col">
 			<Project
-				imgSrc="https://github.com/DreckSallow/Marknote/raw/main/readme/marknote-img.PNG"
-				imgAlt="Marknote"
-				title="Marknote"
-				tech={["Svelte", "Tauri"]}
-				repoLink="https://github.com/DreckSallow/Marknote"
-			>
-				Marknote is a small markdown editor. Its focused to use in the desktop.
-				<br />
-				<br />
-				Markdown allow edit markdown files (based in CommonMark) and see the
-				text parsed. Have a file tree to manage the files and folders in the
-				project
-			</Project>
-			<Project
-				imgSrc="https://github.com/DreckSallow/Marknote/raw/main/readme/marknote-img.PNG"
+				imgSrc="/countries-app.png"
 				imgAlt="CountriesApp"
 				title="CountriesApp"
 				tech={["Svelte", "Typescript", "GraphQl"]}
@@ -40,6 +24,20 @@ export default function () {
 			</Project>
 			<Project
 				imgSrc="https://github.com/DreckSallow/Marknote/raw/main/readme/marknote-img.PNG"
+				imgAlt="Marknote"
+				title="Marknote"
+				tech={["Svelte", "Tauri"]}
+				repoLink="https://github.com/DreckSallow/Marknote"
+			>
+				Marknote is a small markdown editor. Its focused to use in the desktop.
+				<br />
+				<br />
+				Markdown allow edit markdown files (based in CommonMark) and see the
+				text parsed. Have a file tree to manage the files and folders in the
+				project
+			</Project>
+			<Project
+				imgSrc="/wflow.png"
 				imgAlt="Wflow"
 				title="Wflow"
 				tech={["Rust"]}
