@@ -6,7 +6,7 @@ export default function () {
 	return (
 		<Content className="flex-col">
 			<Project
-				imgSrc="/countries-app.png"
+				imgSrc="/DreckSallow/countries-app.png"
 				imgAlt="CountriesApp"
 				title="CountriesApp"
 				tech={["Svelte", "Typescript", "GraphQl"]}
@@ -37,7 +37,7 @@ export default function () {
 				project
 			</Project>
 			<Project
-				imgSrc="/wflow.png"
+				imgSrc="/DreckSallow/wflow.png"
 				imgAlt="Wflow"
 				title="Wflow"
 				tech={["Rust"]}

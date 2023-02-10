@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import styled from "styled-components";
+import { IconPersonal } from "../components/icons/common";
 import { Github, Linkedin, Mail } from "../components/icons/social";
 import IntoSection from "../components/IntoSection";
 import NavBar from "../components/NavBar";
@@ -66,7 +67,10 @@ export default function ({ isResponsive }: Props) {
 	return (
 		<>
 			<NavBar
-				root={{ link: "#start", text: "DiksonDev" }}
+				root={{
+					link: "#start",
+					el: <IconPersonal height="35px" width="35px" />,
+				}}
 				routes={Routes}
 				isResponsive={isResponsive}
 			/>

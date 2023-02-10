@@ -1,19 +1,20 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { useLocalRouter } from "../context/router/localRouter";
+import { Children } from "../interfaces";
 import { MenuIcon, XIcon } from "./icons/Menu";
 
 interface RouteLink {
-	text: string | JSX.Element | JSX.Element[];
+	text?: string | JSX.Element | JSX.Element[];
 	link: string;
 }
 
-interface LinkI extends RouteLink {
+interface LinkI extends RouteLink, Children {
 	click(link: RouteLink["link"]): void;
 	className?: string;
 }
 
-const Link = ({ link, text, click, className }: LinkI) => {
+const Link = ({ link, text, click, className, children }: LinkI) => {
 	return (
 		// rome-ignore lint/a11y/useValidAnchor: <explanation>
 		<a
@@ -25,14 +26,14 @@ const Link = ({ link, text, click, className }: LinkI) => {
 				click(link);
 			}}
 		>
-			{text}
+			{text ? text : children}
 		</a>
 	);
 };
 
 interface NavBarProps {
 	className?: string;
-	root: RouteLink;
+	root: { link: string; el: React.ReactNode };
 	routes: RouteLink[];
 	isResponsive?: boolean;
 }
@@ -63,12 +64,13 @@ export default function NavBar({
 				isResponsive={isResponsive ?? false}
 			>
 				<NavLink
-					className="flex"
+					className="flex Root__Link"
 					selected={false}
 					click={setLocalPath}
-					text={root.text}
 					link={root.link}
-				/>
+				>
+					{root.el}
+				</NavLink>
 				{!isResponsive &&
 					routes.map((r, i) => {
 						return (
@@ -130,6 +132,10 @@ const Nav = styled.section<{ isResponsive: boolean }>`
 	position: fixed;
 	top: 0;
 	z-index: 100;
+
+	& .Root__Link{
+		margin: -.3em;
+	}
 `;
 
 const NavLink = styled(Link)<{ selected: boolean }>`
