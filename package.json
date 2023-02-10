@@ -2,6 +2,7 @@
   "name": "drecksallow",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://DreckSallow.github.io/DreckSallow",
   "type": "module",
   "scripts": {
     "dev": "vite",
