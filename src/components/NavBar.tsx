@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useLocalRouter } from "../context/router/localRouter";
 import { Children } from "../interfaces";
@@ -46,6 +46,7 @@ export default function NavBar({
 }: NavBarProps) {
 	const [displayContent, setDisplayContent] = useState(false);
 	const { setLocalPath, compareHash } = useLocalRouter();
+	const NavBarRef = useRef<null | HTMLElement>(null);
 
 	const handleNavigation = useCallback(
 		(link: string) => {
@@ -56,12 +57,30 @@ export default function NavBar({
 		},
 		[displayContent],
 	);
+	useEffect(() => {
+		const changeHeight = (e: Event) => {
+			if (!NavBarRef.current) return;
+			if (document.body.getBoundingClientRect().top > -5) {
+				NavBarRef.current.style.maxHeight = "58px";
+			} else {
+				NavBarRef.current.style.height = "70.5px";
+				NavBarRef.current.style.maxHeight = "70.5px";
+			}
+		};
+
+		window.addEventListener("scroll", changeHeight);
+
+		return () => {
+			window.removeEventListener("scroll", changeHeight);
+		};
+	}, []);
 
 	return (
 		<>
 			<Nav
-				className={`flex-row w-full${className ?? ""}`}
+				className={`flex-row w-full ${className ?? ""}`}
 				isResponsive={isResponsive ?? false}
+				ref={NavBarRef}
 			>
 				<NavLink
 					className="flex Root__Link"
@@ -71,19 +90,21 @@ export default function NavBar({
 				>
 					{root.el}
 				</NavLink>
-				{!isResponsive &&
-					routes.map((r, i) => {
-						return (
-							<NavLink
-								// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-								key={i}
-								selected={compareHash(r.link)}
-								click={setLocalPath}
-								text={r.text}
-								link={r.link}
-							/>
-						);
-					})}
+				<div className="flex-row Nav__Links">
+					{!isResponsive &&
+						routes.map((r, i) => {
+							return (
+								<NavLink
+									// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+									key={i}
+									selected={compareHash(r.link)}
+									click={setLocalPath}
+									text={r.text}
+									link={r.link}
+								/>
+							);
+						})}
+				</div>
 				{isResponsive && (
 					<div
 						className="flex"
@@ -120,21 +141,28 @@ export default function NavBar({
 	);
 }
 
-const Nav = styled.section<{ isResponsive: boolean }>`
+const Nav = styled.nav<{ isResponsive: boolean }>`
+	align-items: center;
 	background-color: ${({ theme }) => theme.buildColor("back", 2)};
 	color: ${({ theme }) => theme.buildColor("fontColor")};
 	font-size: 1.1em;
 	height: max-content;
 	max-height: 58.5px;
-	justify-content: ${({ isResponsive }) =>
-		isResponsive ? "space-between" : "space-evenly"};
+	justify-content: space-between;
 	padding: 0.8em;
 	position: fixed;
 	top: 0;
 	z-index: 100;
+	transition: all 200ms ease-in;
 
 	& .Root__Link{
-		margin: -.3em;
+		flex: 1;
+		padding-left: 3em;
+	}
+	& .Nav__Links{
+		flex:2;
+		justify-content: space-between;
+		padding-right: 3em;
 	}
 `;
 
