@@ -84,7 +84,14 @@ export default function ({ isResponsive }: Props) {
 						challenge myself.I`m sure that I can be an important part of your
 						company to build exceptional things.
 					</p>
-					<button role="button">Contact me</button>
+					<button
+						role="button"
+						onClick={() => {
+							setLocalPath("#contact", true);
+						}}
+					>
+						Contact me
+					</button>
 				</FirstSection>
 				<Section id="about">
 					<TitleSection>About me</TitleSection>
