@@ -22,5 +22,4 @@ git commit -m 'deploy'
 
 git push -f git@github.com:DreckSallow/DreckSallow.git main:gh-pages
 
-
 cd -
