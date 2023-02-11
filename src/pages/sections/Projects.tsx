@@ -121,7 +121,7 @@ const Project = ({
 const ButtonLink = styled.a`
 	background-color: ${({ theme }) => theme.buildColor("secondary", -5, 70)};
 	border-radius: 2px;
-	color: ${({ theme }) => theme.buildColor("back")};
+	color: white;
 	cursor: pointer;
 	margin-right: .3em;
 	padding: .1em .5em;
@@ -133,6 +133,7 @@ const Content = styled.div`
 `;
 
 const CardProjectContent = styled(Card)`
+	background-color: ${({ theme }) => theme.buildColor("back", 10, 80)};
 	box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px;
 		-webkit-box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px;
 		-moz-box-shadow:  rgb(0 0 0 / 12%) 0px 5px 10px; 
@@ -149,7 +150,6 @@ const CardProjectContent = styled(Card)`
 		margin-top: 1em;
 	}
 	& .Project__Tech{
-		color: ${({ theme }) => theme.get("fontColor")};
 		font-size: .65rem;
 		font-weight: 500;
 		flex-wrap: wrap;

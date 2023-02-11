@@ -23,8 +23,6 @@ body,
 *::before {
   margin: 0;
   padding: 0;
-  color: inherit;
-  background-color: inherit;
   box-sizing: border-box;
   max-height: 100%;
 }

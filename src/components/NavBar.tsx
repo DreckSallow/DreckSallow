@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { useContextTheme } from "../context";
 import { useLocalRouter } from "../context/router/localRouter";
 import { Children } from "../interfaces";
+import { Moon, Sun } from "./icons/common";
 import { MenuIcon, XIcon } from "./icons/Menu";
 
 interface RouteLink {
@@ -46,6 +48,7 @@ export default function NavBar({
 }: NavBarProps) {
 	const [displayContent, setDisplayContent] = useState(false);
 	const { setLocalPath, compareHash } = useLocalRouter();
+	const { typeTheme, toggleTheme } = useContextTheme();
 	const NavBarRef = useRef<null | HTMLElement>(null);
 
 	const handleNavigation = useCallback(
@@ -85,7 +88,10 @@ export default function NavBar({
 				<NavLink
 					className="flex Root__Link"
 					selected={false}
-					click={setLocalPath}
+					click={(link) => {
+						setLocalPath(link);
+						setDisplayContent(false);
+					}}
 					link={root.link}
 				>
 					{root.el}
@@ -104,19 +110,28 @@ export default function NavBar({
 								/>
 							);
 						})}
+					{typeTheme && (
+						<div
+							onKeyDown={() => {
+								//TODO: Generate keyDown shortcut
+							}}
+							role="button"
+							onClick={() => {
+								toggleTheme();
+							}}
+						>
+							{typeTheme === "light" ? <Moon /> : <Sun />}
+						</div>
+					)}
 				</div>
 				{isResponsive && (
 					<div
-						className="flex"
+						className="NavBar__HamburgerIcon flex"
 						onClick={() => setDisplayContent(!displayContent)}
 						role="button"
 						onKeyDown={() => {}}
 					>
-						{displayContent ? (
-							<XIcon fill="black" />
-						) : (
-							<MenuIcon fill="black" />
-						)}
+						{displayContent ? <XIcon /> : <MenuIcon />}
 					</div>
 				)}
 			</Nav>
@@ -153,7 +168,7 @@ const Nav = styled.nav<{ isResponsive: boolean }>`
 	position: fixed;
 	top: 0;
 	z-index: 100;
-	transition: all 200ms ease-in;
+	transition: max-height 200ms ease-in;
 
 	& .Root__Link{
 		flex: 1;
@@ -163,6 +178,16 @@ const Nav = styled.nav<{ isResponsive: boolean }>`
 		flex:2;
 		justify-content: space-between;
 		padding-right: 3em;
+	}
+	& .Nav__Links div:last-child{
+		cursor: pointer;
+	}
+	& .Nav__Links div:last-child > svg{
+		fill: ${({ theme }) => theme.buildColor("fontColor")};
+	}
+
+	& .NavBar__HamburgerIcon svg{
+		fill: ${({ theme }) => theme.buildColor("fontColor")};
 	}
 `;
 
@@ -180,6 +205,7 @@ const NavLink = styled(Link)<{ selected: boolean }>`
 `;
 
 const NavContent = styled.div<{ isWatch: boolean }>`
+	background-color: ${({ theme }) => theme.buildColor("back")};
 	border-top: ${({ theme }) =>
 		`.5px solid ${theme.buildColor("fontColor", 90)}`};
 	gap: 1.5em;

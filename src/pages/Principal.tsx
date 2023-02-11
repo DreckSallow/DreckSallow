@@ -69,7 +69,7 @@ export default function ({ isResponsive }: Props) {
 			<NavBar
 				root={{
 					link: "#start",
-					el: <IconPersonal height="35px" width="35px" />,
+					el: <IconPersonal height="28px" width="28px" />,
 				}}
 				routes={Routes}
 				isResponsive={isResponsive}
@@ -218,6 +218,7 @@ const FirstSection = styled(Section)`
   }
 
   & button{
+		background-color: ${({ theme }) => theme.buildColor("back")};
     border: ${({ theme }) => `1px solid ${theme.buildColor("secondary")}`};
     border-radius:5px;
     color: ${({ theme }) => theme.buildColor("secondary", 0, 80)};
