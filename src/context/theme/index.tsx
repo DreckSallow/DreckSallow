@@ -1,15 +1,21 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ThemeConstants, ThemeContextI } from "./theme";
 import { ThemeProvider } from "styled-components";
 
 type TypeTheme = keyof typeof ThemeConstants;
 
+type ChangeTypeTheme = (oldType: TypeTheme) => TypeTheme;
+
 interface ContextThemeI {
-	changeTheme(typeTheme: TypeTheme): void;
+	changeTheme(typeTheme: ChangeTypeTheme): void;
+	typeTheme: TypeTheme | null;
+	toggleTheme(): void;
 }
 
 const ContextTheme = createContext<ContextThemeI>({
-	changeTheme(typeTheme: TypeTheme) {},
+	changeTheme(typeTheme: ChangeTypeTheme) {},
+	typeTheme: null,
+	toggleTheme() {},
 });
 
 const ThemeState: ThemeContextI = {
@@ -36,20 +42,48 @@ interface Props {
 
 export const ThemeContext = ({ children }: Props) => {
 	const [themeContext, setThemeContext] = useState(ThemeState);
+	const [typeTheme, setTypeTheme] = useState<TypeTheme | null>("light");
+
+	useEffect(() => {
+		const themePrefer = window.localStorage.getItem("theme-prefer");
+		if (!themePrefer) return;
+		setTypeTheme(themePrefer === "dark" ? "dark" : "light");
+		setThemeContext((prev) => ({
+			buildColor: prev.buildColor,
+			get: prev.get,
+			colors: { ...ThemeConstants[themePrefer as TypeTheme] },
+		}));
+	}, []);
 
 	const changeTheme: ContextThemeI = {
-		changeTheme: function (typeTheme): void {
+		changeTheme: function (fn): void {
+			const newTypeTheme = fn(typeTheme ?? "light");
 			setThemeContext((prev) => ({
 				buildColor: prev.buildColor,
 				get: prev.get,
-				colors: { ...ThemeConstants[typeTheme] },
+				colors: { ...ThemeConstants[newTypeTheme] },
 			}));
+			setTypeTheme(newTypeTheme);
+			window.localStorage.setItem("theme-prefer", newTypeTheme);
+		},
+		typeTheme,
+		toggleTheme() {
+			const newTypeTheme = typeTheme === "dark" ? "light" : "dark";
+			setThemeContext((prev) => ({
+				buildColor: prev.buildColor,
+				get: prev.get,
+				colors: { ...ThemeConstants[newTypeTheme] },
+			}));
+			setTypeTheme(newTypeTheme);
+			window.localStorage.setItem("theme-prefer", newTypeTheme);
 		},
 	};
 
 	return (
 		<ContextTheme.Provider value={changeTheme}>
-			<ThemeProvider theme={themeContext}>{children}</ThemeProvider>
+			<ThemeProvider theme={themeContext}>
+				{typeTheme && children}
+			</ThemeProvider>
 		</ContextTheme.Provider>
 	);
 };

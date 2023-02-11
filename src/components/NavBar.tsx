@@ -1,19 +1,22 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
+import { useContextTheme } from "../context";
 import { useLocalRouter } from "../context/router/localRouter";
+import { Children } from "../interfaces";
+import { Moon, Sun } from "./icons/common";
 import { MenuIcon, XIcon } from "./icons/Menu";
 
 interface RouteLink {
-	text: string | JSX.Element | JSX.Element[];
+	text?: string | JSX.Element | JSX.Element[];
 	link: string;
 }
 
-interface LinkI extends RouteLink {
+interface LinkI extends RouteLink, Children {
 	click(link: RouteLink["link"]): void;
 	className?: string;
 }
 
-const Link = ({ link, text, click, className }: LinkI) => {
+const Link = ({ link, text, click, className, children }: LinkI) => {
 	return (
 		// rome-ignore lint/a11y/useValidAnchor: <explanation>
 		<a
@@ -25,14 +28,14 @@ const Link = ({ link, text, click, className }: LinkI) => {
 				click(link);
 			}}
 		>
-			{text}
+			{text ? text : children}
 		</a>
 	);
 };
 
 interface NavBarProps {
 	className?: string;
-	root: RouteLink;
+	root: { link: string; el: React.ReactNode };
 	routes: RouteLink[];
 	isResponsive?: boolean;
 }
@@ -45,6 +48,8 @@ export default function NavBar({
 }: NavBarProps) {
 	const [displayContent, setDisplayContent] = useState(false);
 	const { setLocalPath, compareHash } = useLocalRouter();
+	const { typeTheme, toggleTheme } = useContextTheme();
+	const NavBarRef = useRef<null | HTMLElement>(null);
 
 	const handleNavigation = useCallback(
 		(link: string) => {
@@ -55,45 +60,78 @@ export default function NavBar({
 		},
 		[displayContent],
 	);
+	useEffect(() => {
+		const changeHeight = (e: Event) => {
+			if (!NavBarRef.current) return;
+			if (document.body.getBoundingClientRect().top > -5) {
+				NavBarRef.current.style.maxHeight = "58px";
+			} else {
+				NavBarRef.current.style.height = "70.5px";
+				NavBarRef.current.style.maxHeight = "70.5px";
+			}
+		};
+
+		window.addEventListener("scroll", changeHeight);
+
+		return () => {
+			window.removeEventListener("scroll", changeHeight);
+		};
+	}, []);
 
 	return (
 		<>
 			<Nav
-				className={`flex-row w-full${className ?? ""}`}
+				className={`flex-row w-full ${className ?? ""}`}
 				isResponsive={isResponsive ?? false}
+				ref={NavBarRef}
 			>
 				<NavLink
-					className="flex"
+					className="flex Root__Link"
 					selected={false}
-					click={setLocalPath}
-					text={root.text}
+					click={(link) => {
+						setLocalPath(link);
+						setDisplayContent(false);
+					}}
 					link={root.link}
-				/>
-				{!isResponsive &&
-					routes.map((r, i) => {
-						return (
-							<NavLink
-								// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-								key={i}
-								selected={compareHash(r.link)}
-								click={setLocalPath}
-								text={r.text}
-								link={r.link}
-							/>
-						);
-					})}
+				>
+					{root.el}
+				</NavLink>
+				<div className="flex-row Nav__Links">
+					{!isResponsive &&
+						routes.map((r, i) => {
+							return (
+								<NavLink
+									// rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+									key={i}
+									selected={compareHash(r.link)}
+									click={setLocalPath}
+									text={r.text}
+									link={r.link}
+								/>
+							);
+						})}
+					{typeTheme && (
+						<div
+							onKeyDown={() => {
+								//TODO: Generate keyDown shortcut
+							}}
+							role="button"
+							onClick={() => {
+								toggleTheme();
+							}}
+						>
+							{typeTheme === "light" ? <Moon /> : <Sun />}
+						</div>
+					)}
+				</div>
 				{isResponsive && (
 					<div
-						className="flex"
+						className="NavBar__HamburgerIcon flex"
 						onClick={() => setDisplayContent(!displayContent)}
 						role="button"
 						onKeyDown={() => {}}
 					>
-						{displayContent ? (
-							<XIcon fill="black" />
-						) : (
-							<MenuIcon fill="black" />
-						)}
+						{displayContent ? <XIcon /> : <MenuIcon />}
 					</div>
 				)}
 			</Nav>
@@ -118,18 +156,39 @@ export default function NavBar({
 	);
 }
 
-const Nav = styled.section<{ isResponsive: boolean }>`
+const Nav = styled.nav<{ isResponsive: boolean }>`
+	align-items: center;
 	background-color: ${({ theme }) => theme.buildColor("back", 2)};
 	color: ${({ theme }) => theme.buildColor("fontColor")};
 	font-size: 1.1em;
 	height: max-content;
 	max-height: 58.5px;
-	justify-content: ${({ isResponsive }) =>
-		isResponsive ? "space-between" : "space-evenly"};
+	justify-content: space-between;
 	padding: 0.8em;
 	position: fixed;
 	top: 0;
 	z-index: 100;
+	transition: max-height 200ms ease-in;
+
+	& .Root__Link{
+		flex: 1;
+		padding-left: 3em;
+	}
+	& .Nav__Links{
+		flex:2;
+		justify-content: space-between;
+		padding-right: 3em;
+	}
+	& .Nav__Links div:last-child{
+		cursor: pointer;
+	}
+	& .Nav__Links div:last-child > svg{
+		fill: ${({ theme }) => theme.buildColor("fontColor")};
+	}
+
+	& .NavBar__HamburgerIcon svg{
+		fill: ${({ theme }) => theme.buildColor("fontColor")};
+	}
 `;
 
 const NavLink = styled(Link)<{ selected: boolean }>`
@@ -146,6 +205,7 @@ const NavLink = styled(Link)<{ selected: boolean }>`
 `;
 
 const NavContent = styled.div<{ isWatch: boolean }>`
+	background-color: ${({ theme }) => theme.buildColor("back")};
 	border-top: ${({ theme }) =>
 		`.5px solid ${theme.buildColor("fontColor", 90)}`};
 	gap: 1.5em;

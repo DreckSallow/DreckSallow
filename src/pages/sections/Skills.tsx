@@ -89,6 +89,7 @@ const Content = styled.div`
 `;
 
 const CustomCard = styled(Card)<{ iconFill?: string; iconHoverFill?: string }>`
+	background-color: ${({ theme }) => theme.buildColor("back", 10, 80)};
 	box-shadow:  rgb(0 0 0 / 10%) 0px 5px 10px;
 		-webkit-box-shadow:  rgb(0 0 0 / 10%) 0px 5px 10px;
 		-moz-box-shadow:  rgb(0 0 0 / 10%) 0px 5px 10px;

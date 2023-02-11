@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import styled from "styled-components";
+import { IconPersonal } from "../components/icons/common";
 import { Github, Linkedin, Mail } from "../components/icons/social";
 import IntoSection from "../components/IntoSection";
 import NavBar from "../components/NavBar";
@@ -66,7 +67,10 @@ export default function ({ isResponsive }: Props) {
 	return (
 		<>
 			<NavBar
-				root={{ link: "#start", text: "DiksonDev" }}
+				root={{
+					link: "#start",
+					el: <IconPersonal height="28px" width="28px" />,
+				}}
 				routes={Routes}
 				isResponsive={isResponsive}
 			/>
@@ -77,10 +81,17 @@ export default function ({ isResponsive }: Props) {
 					<p>
 						I´m Frontend Developer, passionate about technology, and focused on
 						building better projects. Always for ways to expand my horizons and
-						challenge myself.I`m sure that I can be an important part of your
+						challenge myself. I'm sure that I can be an important part of your
 						company to build exceptional things.
 					</p>
-					<button role="button">Contact me</button>
+					<button
+						role="button"
+						onClick={() => {
+							setLocalPath("#contact", true);
+						}}
+					>
+						Contact me
+					</button>
 				</FirstSection>
 				<Section id="about">
 					<TitleSection>About me</TitleSection>
@@ -182,7 +193,7 @@ const Section = styled(IntoSection)<{ minH?: string }>`
 	margin: 0 auto;
 	max-width: 900px;
 	min-height: ${({ minH }) => (minH ? minH : "100vh")};
-  padding-top: 70px;
+  padding-top: 85px;
 `;
 
 const FirstSection = styled(Section)`
@@ -207,6 +218,7 @@ const FirstSection = styled(Section)`
   }
 
   & button{
+		background-color: ${({ theme }) => theme.buildColor("back")};
     border: ${({ theme }) => `1px solid ${theme.buildColor("secondary")}`};
     border-radius:5px;
     color: ${({ theme }) => theme.buildColor("secondary", 0, 80)};
