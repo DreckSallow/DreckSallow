@@ -81,7 +81,7 @@ export default function ({ isResponsive }: Props) {
 					<p>
 						I´m Frontend Developer, passionate about technology, and focused on
 						building better projects. Always for ways to expand my horizons and
-						challenge myself.I`m sure that I can be an important part of your
+						challenge myself. I'm sure that I can be an important part of your
 						company to build exceptional things.
 					</p>
 					<button
@@ -193,7 +193,7 @@ const Section = styled(IntoSection)<{ minH?: string }>`
 	margin: 0 auto;
 	max-width: 900px;
 	min-height: ${({ minH }) => (minH ? minH : "100vh")};
-  padding-top: 70px;
+  padding-top: 85px;
 `;
 
 const FirstSection = styled(Section)`
