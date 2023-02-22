@@ -11,7 +11,7 @@ export default function () {
 				title="CountriesApp"
 				tech={["Svelte", "Typescript", "GraphQl"]}
 				repoLink="https://github.com/DreckSallow/countries-app-svelte"
-				demoLink="https://countries-app-svelte-6x6p-kadnr1vr8-dreck2003.vercel.app/"
+				demoLink="https://countries-app-svelte-6x6p.vercel.app/"
 			>
 				CountriesApp is a web application for viewing, filtering and sorting
 				countries. <br />
