@@ -1,6 +1,7 @@
 # Dikson Aranda
 
-Visit my website: [https://drecksallow.github.io/DreckSallow/](https://drecksallow.github.io/DreckSallow/)
+Visit my website: [http://arandadev.com/](http://arandadev.com/)
+
 
 [![GitHub Dreck](https://img.shields.io/github/followers/DreckSallow?label=follow&style=social)](https://github.com/DreckSallow)&emsp;![d](https://visitor-badge.laobi.icu/badge?page_id=DreckSallow/DreckSallow)
 
@@ -9,7 +10,7 @@ Visit my website: [https://drecksallow.github.io/DreckSallow/](https://drecksall
   <a href="https://www.linkedin.com/in/dikson-aranda/">
     <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white" height=23>
   </a>
-  <a href="mailto:arandadikson@gmail.com">
+  <a href="mailto:dikson@arandadev.com">
     <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" height=23>
   </a> 
   <a href="https://github.com/DreckSallow/">
